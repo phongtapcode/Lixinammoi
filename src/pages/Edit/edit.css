@@ -1,5 +1,7 @@
 .edit {
   width: 100%;
+  margin-top: 20px;
+  text-align: center;
 }
 .edit form {
   width: 250px;
@@ -11,11 +13,14 @@ form .edit__percentage {
 }
 .edit__percentage label {
   width: 40px;
+  font-size: 1rem;
 }
 .edit__percentage input {
-    height: 40px;
+  width: 200px;
+  height: 40px;
+  font-size: 1rem;
 }
-.button__submit{
-    margin-left: 100px;
-    margin-top: 20px;
+.button__submit {
+  margin-left: 100px;
+  margin-top: 20px;
 }

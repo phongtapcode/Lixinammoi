@@ -1,27 +1,47 @@
-.random{
-    width: auto;
+body {
+  font-size: 63.5%;
+  background: url("https://image.dienthoaivui.com.vn/x,webp,q90/https://dashboard.dienthoaivui.com.vn/uploads/wp-content/uploads/2022/12/background-tet1.jpg");
 }
-.random__wheel{
-    text-align: center;
-    position: relative;
+.random {
+  width: auto;
 }
-.random__wheel .random__wheel--icon{
-    position: absolute;
-    top: 51%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 26px; 
-    color: red;
+.random__wheel {
+  text-align: center;
+  position: relative;
 }
-.random__wheel canvas{
-    transition-duration: 9s;
-    transition-timing-function: cubic-bezier(0.6, 0, 0, 1);
-    border-radius: 50%;
+.random__wheel .random__wheel--icon {
+  position: absolute;
+  top: 51%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 26px;
+  color: red;
 }
-.random__rotate{
-    text-align: center;
-    margin-top: 50px;
+.random__wheel canvas {
+  transition-duration: 9s;
+  transition-timing-function: cubic-bezier(0.6, 0, 0, 1);
+  border-radius: 50%;
 }
-.random__rotate button{
-    width: 100px;
+.random__rotate {
+  text-align: center;
+  margin-top: 50px;
+}
+.random__rotate button {
+  width: 100px;
+}
+.random__wheel .random__wheel--alert {
+  position: absolute;
+  width: 45%;
+  height: 150px;
+  background-color: aquamarine;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.random__wheel--alert p {
+  margin-top: 20px;
+  font-size: 1.4rem;
+}
+.random__wheel--alert .hidden {
+  width: 3rem;
 }

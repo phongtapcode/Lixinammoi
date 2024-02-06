@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../Random/random.css";
+import AlertMoney from "../../components/AlertMoney";
 const color = [
   "#00FFFF",
   "#0000FF",
@@ -13,21 +14,27 @@ const color = [
 const money = ["5k", "10k", "20k", "50k", "100k", "200k", "500k"];
 const moneyDeg = [70, 0, 310, 260, 215, 180, 110];
 function Random() {
+  const [showAlert, setShowAlert] = useState(false);
   const [deg, setDeg] = useState(0);
   const multiDeg = useRef(10);
   const percentageMoney = useRef([]);
+  const randomIndexMoney = useRef(0);
   const canvasRef = useRef(null);
+  // Khởi tạo giá tỉ lệ nếu chưa có trong local
   useEffect(() => {
     if (!localStorage.getItem("percentageMoney")) {
-      localStorage.setItem('percentageMoney', JSON.stringify({
-        "5k": "30",
-        "10k": "20",
-        "20k": "10",
-        "50k": "10",
-        "100k": "10",
-        "200k": "10",
-        "500k": "10"
-      }));
+      localStorage.setItem(
+        "percentageMoney",
+        JSON.stringify({
+          "5k": "30",
+          "10k": "20",
+          "20k": "10",
+          "50k": "10",
+          "100k": "10",
+          "200k": "10",
+          "500k": "10",
+        })
+      );
     }
   }, []);
   useEffect(() => {
@@ -111,7 +118,7 @@ function Random() {
   }, []);
 
   const handleRandom = () => {
-    const ramdomIndexMoney = Math.floor(Math.random() * 100);
+    randomIndexMoney.current = Math.floor(Math.random() * 100);
     if (percentageMoney.current.length > 100) {
       percentageMoney.current.splice(-100);
       // Đảo lại dãy số ngẫu nhiên
@@ -123,23 +130,35 @@ function Random() {
         ]; // Hoán đổi giá trị tại vị trí i và j
       }
     }
-    console.log(money[percentageMoney.current[ramdomIndexMoney]]);
+    console.log(money[percentageMoney.current[randomIndexMoney.current]]);
     setDeg(
       360 * multiDeg.current +
-        moneyDeg[percentageMoney.current[ramdomIndexMoney]]
+        moneyDeg[percentageMoney.current[randomIndexMoney.current]]
     );
     if (multiDeg.current >= 20) {
       multiDeg.current = 10;
     } else {
       multiDeg.current *= 2;
     }
+    setTimeout(() => {
+      setShowAlert(true);
+    }, 9000);
   };
-
+  const handleAlertClose = () => {
+    setShowAlert(false);
+  };
   return (
     <div className="random">
       <div className="random__wheel">
         <canvas ref={canvasRef} style={{ transform: `rotate(${deg}deg)` }} />
         <span className="random__wheel--icon">▼</span>
+        {showAlert && (
+          <AlertMoney
+            classname="random__wheel--alert"
+            money={money[percentageMoney.current[randomIndexMoney.current]]}
+            onClick={handleAlertClose}
+          />
+        )}
       </div>
       <div className="random__rotate">
         <button
