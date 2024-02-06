@@ -1,0 +1,27 @@
+.random{
+    width: auto;
+}
+.random__wheel{
+    text-align: center;
+    position: relative;
+}
+.random__wheel .random__wheel--icon{
+    position: absolute;
+    top: 51%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 26px; 
+    color: red;
+}
+.random__wheel canvas{
+    transition-duration: 9s;
+    transition-timing-function: cubic-bezier(0.6, 0, 0, 1);
+    border-radius: 50%;
+}
+.random__rotate{
+    text-align: center;
+    margin-top: 50px;
+}
+.random__rotate button{
+    width: 100px;
+}

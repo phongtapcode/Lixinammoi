@@ -1,0 +1,21 @@
+.edit {
+  width: 100%;
+}
+.edit form {
+  width: 250px;
+  margin: 0 auto;
+}
+form .edit__percentage {
+  margin: 0 auto;
+  margin-top: 20px;
+}
+.edit__percentage label {
+  width: 40px;
+}
+.edit__percentage input {
+    height: 40px;
+}
+.button__submit{
+    margin-left: 100px;
+    margin-top: 20px;
+}
