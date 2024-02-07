@@ -26,7 +26,7 @@ function Edit() {
   }
 
   if(!localStorage.getItem("time")){
-    localStorage.setItem("time","9");
+    localStorage.setItem("time","5");
   }
   const dataStorage = localStorage.getItem("percentageMoney");
   const timeStorage = localStorage.getItem("time");
