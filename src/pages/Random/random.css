@@ -1,9 +1,19 @@
 body {
   font-size: 63.5%;
+  position: relative;
   background: url("https://image.dienthoaivui.com.vn/x,webp,q90/https://dashboard.dienthoaivui.com.vn/uploads/wp-content/uploads/2022/12/background-tet1.jpg");
+}
+.header{
+  position: absolute;
+  top:-100px;
+  background-color: rgba(241, 62, 62, 0.678);
+  width: 100%;
+  color: aliceblue;
+  text-align: center;
 }
 .random {
   width: auto;
+  margin-top: 100px;
 }
 .random__wheel {
   text-align: center;
@@ -11,8 +21,8 @@ body {
 }
 .random__wheel .random__wheel--icon {
   position: absolute;
-  top: 49.5%;
-  left: 51%;
+  top: 49.1%;
+  left: 51.3%;
   transform: translate(-50%, -50%);
   font-size: 2rem;
   color: red;

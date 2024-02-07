@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../Random/random.css";
-// import 'antd/dist/antd.css'
 import { Button,Modal } from "antd";
+import Header from "../../components/Header";;
 const color = [
   "rgb(93, 180, 172)",
   "rgb(143, 210, 164)",
@@ -12,6 +12,15 @@ const color = [
   "rgb(236, 101, 73)",
   "rgb(209, 60, 75)",
 ];
+const moneyUrl = [
+  "https://upload.wikimedia.org/wikipedia/vi/7/7c/%C4%90%E1%BB%93ng_b%E1%BA%A1c_5000_%C4%91%E1%BB%93ng.jpg",//5
+  "https://gonatour.vn/vnt_upload/news/05_2020/tien_10000_dong_viet_nam.jpg", //10
+  "https://vnn-imgs-a1.vgcloud.vn/photo-cms-kienthuc.zadn.vn/zoomh/800/uploaded/nguyenvan/2021_07_01/5/bi-mat-it-biet-tren-nhung-to-tien-viet-dang-luu-hanh-Hinh-4.jpg",//20
+  "https://vnn-imgs-a1.vgcloud.vn/photo-cms-kienthuc.zadn.vn/zoomh/800/uploaded/nguyenvan/2021_07_01/5/bi-mat-it-biet-tren-nhung-to-tien-viet-dang-luu-hanh-Hinh-3.jpg",//50
+  "https://www.sbv.gov.vn/webcenter/cs/groups/cucphathanhkhoquy/documents/noidungtinh/c2j2/mdcy/~edisp/~export/SBVWEBAPP01SBV072320~3/338348-04.jpg",//100
+  "https://baoxaydung.com.vn/stores/news_dataimages/vananh/072016/06/10/100838baoxaydung_image003.jpg",//200
+  "https://www.sbv.gov.vn/webcenter/cs/groups/cucphathanhkhoquy/documents/noidungtinh/c2j2/mdcy/~edisp/~export/SBVWEBAPP01SBV072320~3/338348.jpg"//500
+] 
 const money = ["5k", "10k", "20k", "50k", "100k", "200k", "500k"];
 const moneyDeg = [350, 280, 240, 190, 130, 65, 20];
 function Random() {
@@ -73,7 +82,7 @@ function Random() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.beginPath();
       ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-      ctx.fillStyle = "blue";
+      ctx.fillStyle = "white";
       ctx.fill();
       // Chia hình tròn thành 5 phần bằng nhau
       const sliceAngle = (2 * Math.PI) / 7;
@@ -98,7 +107,7 @@ function Random() {
 
         // Vẽ chữ
         ctx.fillStyle = "black";
-        ctx.font = "bold 12px Arial";
+        ctx.font = "bold 14px Arial";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillText(money[i], 0, 0); // Vẽ chữ tại vị trí (0, 0) sau khi canvas đã được di chuyển và xoay
@@ -108,6 +117,10 @@ function Random() {
       ctx.beginPath();
       ctx.arc(centerX, centerY, 10, 0, 2 * Math.PI);
       ctx.fillStyle = "white";
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, 7, 0, 2 * Math.PI);
+      ctx.fillStyle = "black";
       ctx.fill();
     };
     // Vẽ lại hình tròn khi kích thước của màn hình thay đổi
@@ -147,18 +160,75 @@ function Random() {
       setCloseButton(true);
     },parseInt(timeRotate.current)*1000);
   };
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [modalText, setModalText] = useState('Content of the modal');
+  const showModal = () => {
+    setCloseButton(false);
+    randomIndexMoney.current = Math.floor(Math.random() * 100);
+    if (percentageMoney.current.length > 100) {
+      percentageMoney.current.splice(-100);
+      // Đảo lại dãy số ngẫu nhiên
+      for (let i = percentageMoney.current.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [percentageMoney.current[i], percentageMoney.current[j]] = [
+          percentageMoney.current[j],
+          percentageMoney.current[i],
+        ]; // Hoán đổi giá trị tại vị trí i và j
+      }
+    }
+    setDeg(
+      360 * multiDeg.current +
+        moneyDeg[percentageMoney.current[randomIndexMoney.current]]
+    );
+    if (multiDeg.current >= 20) {
+      multiDeg.current = 10;
+    } else {
+      multiDeg.current *= 2;
+    }
+    setTimeout(() => {
+      setOpen(true);
+      setModalText(`Bạn nhận được ${money[percentageMoney.current[randomIndexMoney.current]]}`);
+      setCloseButton(true);
+    },parseInt(timeRotate.current)*1000);
+
+  };
+  const handleOk = () => {
+    setConfirmLoading(true);
+    setTimeout(() => {
+      setOpen(false);
+      setConfirmLoading(false);
+    }, 0);
+  };
+  const handleCancel = () => {
+    console.log('Clicked cancel button');
+    setOpen(false);
+  };
   return (
     <div className="random">
+      <Header />
       <div className="random__wheel">
-        <canvas ref={canvasRef} style={{ transform: `rotate(${deg}deg)`,transitionDuration: `${timeRotate.current}s` }} />
+        <canvas ref={canvasRef} style={{ transform: `rotate(${deg}deg)`, transitionDuration: `${timeRotate.current}s` }} />
         <span className="random__wheel--icon">►</span>
       </div>
       <div className="random__rotate">
-      {
-        closeButton && <Button type="primary" className={"random__rotate--button"} onClick={handleRandom}>
-          Quay
-        </Button>
-      }
+        {closeButton && (
+          <>
+            <Button type="primary" onClick={showModal}>
+              Quay
+            </Button>
+            <Modal
+              title="Chúc mừng năm mới"
+              open={open}
+              onOk={handleOk}
+              confirmLoading={confirmLoading}
+              onCancel={handleCancel}
+            >
+              <p style={{fontSize: '20px'}}>{modalText}</p>
+              <img src={moneyUrl[percentageMoney.current[randomIndexMoney.current]]} style={{width: '100%'}}/>
+            </Modal>
+          </>
+        )}
       </div>
     </div>
   );

@@ -9,6 +9,25 @@ function Edit() {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState("Bạn có muốn về trang chủ?");
+
+  if (!localStorage.getItem("percentageMoney")) {
+    localStorage.setItem(
+      "percentageMoney",
+      JSON.stringify({
+        "5k": "30",
+        "10k": "20",
+        "20k": "10",
+        "50k": "10",
+        "100k": "10",
+        "200k": "10",
+        "500k": "10",
+      })
+    );
+  }
+
+  if(!localStorage.getItem("time")){
+    localStorage.setItem("time","9");
+  }
   const dataStorage = localStorage.getItem("percentageMoney");
   const timeStorage = localStorage.getItem("time");
   const timeRotate = JSON.parse(timeStorage);
@@ -23,7 +42,7 @@ function Edit() {
     "200k": datas["200k"],
     "500k": datas["500k"],
   });
-
+  
   const handleChange = (event) => {
     const { name, value } = event.target;
     setValues({
@@ -67,10 +86,12 @@ function Edit() {
   const handleCancel = () => {
     setOpen(false);
   };
+
   const handleChangeTime = (event)=>{
     const { name, value } = event.target;
     setTime(value);
   }
+  
   return (
     <div className="edit">
       <h1>Chỉnh tỉ lệ quay(%)</h1>
