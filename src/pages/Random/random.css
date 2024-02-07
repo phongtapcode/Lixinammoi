@@ -11,14 +11,13 @@ body {
 }
 .random__wheel .random__wheel--icon {
   position: absolute;
-  top: 51%;
-  left: 50%;
+  top: 49.5%;
+  left: 51%;
   transform: translate(-50%, -50%);
-  font-size: 26px;
+  font-size: 2rem;
   color: red;
 }
 .random__wheel canvas {
-  transition-duration: 9s;
   transition-timing-function: cubic-bezier(0.6, 0, 0, 1);
   border-radius: 50%;
 }

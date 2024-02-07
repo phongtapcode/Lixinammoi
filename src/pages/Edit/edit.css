@@ -3,6 +3,9 @@
   margin-top: 20px;
   text-align: center;
 }
+.edit h1{
+  font-size: 25px;
+}
 .edit form {
   width: 250px;
   margin: 0 auto;
@@ -16,11 +19,19 @@ form .edit__percentage {
   font-size: 1rem;
 }
 .edit__percentage input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
   width: 200px;
-  height: 40px;
-  font-size: 1rem;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s, box-shadow 0.5s;
+  color: #333;
+  background-color: rgba(255, 255, 255, 0.6);
 }
-.button__submit {
-  margin-left: 100px;
-  margin-top: 20px;
+.edit__percentage input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
+

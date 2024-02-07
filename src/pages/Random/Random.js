@@ -1,27 +1,32 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../Random/random.css";
-import AlertMoney from "../../components/AlertMoney";
+// import 'antd/dist/antd.css'
+import { Button,Modal } from "antd";
 const color = [
-  "#00FFFF",
-  "#0000FF",
-  "#ADD8E6",
-  "#FFFF00",
-  "#00FF00",
-  "#808000",
-  "#C0C0C0",
-  "#FFC0CB",
+  "rgb(93, 180, 172)",
+  "rgb(143, 210, 164)",
+  "rgb(194, 230, 159)",
+  "rgb(232, 246, 164)",
+  "rgb(254, 229, 150)",
+  "rgb(249, 148, 86)",
+  "rgb(236, 101, 73)",
+  "rgb(209, 60, 75)",
 ];
 const money = ["5k", "10k", "20k", "50k", "100k", "200k", "500k"];
-const moneyDeg = [70, 0, 310, 260, 215, 180, 110];
+const moneyDeg = [350, 280, 240, 190, 130, 65, 20];
 function Random() {
   const [showAlert, setShowAlert] = useState(false);
+  const [closeButton,setCloseButton] = useState(true);
   const [deg, setDeg] = useState(0);
   const multiDeg = useRef(10);
   const percentageMoney = useRef([]);
   const randomIndexMoney = useRef(0);
+  const timeRotate = useRef("");
   const canvasRef = useRef(null);
-  // Khởi tạo giá tỉ lệ nếu chưa có trong local
   useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    // Khởi tạo giá tỉ lệ nếu chưa có trong local
     if (!localStorage.getItem("percentageMoney")) {
       localStorage.setItem(
         "percentageMoney",
@@ -36,23 +41,18 @@ function Random() {
         })
       );
     }
-  }, []);
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    // Lấy thông tin từ local storage
-    const data = localStorage.getItem("percentageMoney");
-    if (data) {
-      const datas = JSON.parse(data);
-      let indexMoney = 0;
-      for (let i in datas) {
-        for (let j = 0; j < parseInt(datas[i]); j++) {
-          percentageMoney.current.push(indexMoney);
-        }
-        indexMoney++;
+    if(!localStorage.getItem("time")){
+      localStorage.setItem("time","9");
+    }
+    const dataStorage = localStorage.getItem("percentageMoney");
+    timeRotate.current = localStorage.getItem("time");
+    const datas = JSON.parse(dataStorage);
+    let indexMoney = 0;
+    for (let i in datas) {
+      for (let j = 0; j < parseInt(datas[i]); j++) {
+        percentageMoney.current.push(indexMoney);
       }
-    } else {
-      console.log("Không tìm thấy dữ liệu trong local storage.");
+      indexMoney++;
     }
     const drawCircle = () => {
       // Lấy kích thước của màn hình
@@ -118,6 +118,7 @@ function Random() {
   }, []);
 
   const handleRandom = () => {
+    setCloseButton(false);
     randomIndexMoney.current = Math.floor(Math.random() * 100);
     if (percentageMoney.current.length > 100) {
       percentageMoney.current.splice(-100);
@@ -130,7 +131,6 @@ function Random() {
         ]; // Hoán đổi giá trị tại vị trí i và j
       }
     }
-    console.log(money[percentageMoney.current[randomIndexMoney.current]]);
     setDeg(
       360 * multiDeg.current +
         moneyDeg[percentageMoney.current[randomIndexMoney.current]]
@@ -141,32 +141,24 @@ function Random() {
       multiDeg.current *= 2;
     }
     setTimeout(() => {
-      setShowAlert(true);
-    }, 9000);
-  };
-  const handleAlertClose = () => {
-    setShowAlert(false);
+      Modal.success({
+        content: `Bạn nhận được ${money[percentageMoney.current[randomIndexMoney.current]]}`,
+      });
+      setCloseButton(true);
+    },parseInt(timeRotate.current)*1000);
   };
   return (
     <div className="random">
       <div className="random__wheel">
-        <canvas ref={canvasRef} style={{ transform: `rotate(${deg}deg)` }} />
-        <span className="random__wheel--icon">▼</span>
-        {showAlert && (
-          <AlertMoney
-            classname="random__wheel--alert"
-            money={money[percentageMoney.current[randomIndexMoney.current]]}
-            onClick={handleAlertClose}
-          />
-        )}
+        <canvas ref={canvasRef} style={{ transform: `rotate(${deg}deg)`,transitionDuration: `${timeRotate.current}s` }} />
+        <span className="random__wheel--icon">►</span>
       </div>
       <div className="random__rotate">
-        <button
-          className={"random__rotate--button btn btn-success"}
-          onClick={handleRandom}
-        >
+      {
+        closeButton && <Button type="primary" className={"random__rotate--button"} onClick={handleRandom}>
           Quay
-        </button>
+        </Button>
+      }
       </div>
     </div>
   );
