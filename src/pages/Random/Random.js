@@ -27,10 +27,14 @@ function Random() {
   const [showAlert, setShowAlert] = useState(false);
   const [closeButton,setCloseButton] = useState(true);
   const [deg, setDeg] = useState(0);
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [modalText, setModalText] = useState('');
   const multiDeg = useRef(10);
   const percentageMoney = useRef([]);
   const randomIndexMoney = useRef(0);
   const timeRotate = useRef("");
+  const soundRef = useRef(new Audio("/assets/mp3/Âm thanh báo.mp3"));
   const canvasRef = useRef(null);
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -130,39 +134,6 @@ function Random() {
     return () => window.removeEventListener("resize", drawCircle);
   }, []);
 
-  const handleRandom = () => {
-    setCloseButton(false);
-    randomIndexMoney.current = Math.floor(Math.random() * 100);
-    if (percentageMoney.current.length > 100) {
-      percentageMoney.current.splice(-100);
-      // Đảo lại dãy số ngẫu nhiên
-      for (let i = percentageMoney.current.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [percentageMoney.current[i], percentageMoney.current[j]] = [
-          percentageMoney.current[j],
-          percentageMoney.current[i],
-        ]; // Hoán đổi giá trị tại vị trí i và j
-      }
-    }
-    setDeg(
-      360 * multiDeg.current +
-        moneyDeg[percentageMoney.current[randomIndexMoney.current]]
-    );
-    if (multiDeg.current >= 20) {
-      multiDeg.current = 10;
-    } else {
-      multiDeg.current *= 2;
-    }
-    setTimeout(() => {
-      Modal.success({
-        content: `Bạn nhận được ${money[percentageMoney.current[randomIndexMoney.current]]}`,
-      });
-      setCloseButton(true);
-    },parseInt(timeRotate.current)*1000);
-  };
-  const [open, setOpen] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState('Content of the modal');
   const showModal = () => {
     setCloseButton(false);
     randomIndexMoney.current = Math.floor(Math.random() * 100);
@@ -190,6 +161,7 @@ function Random() {
       setOpen(true);
       setModalText(`Bạn nhận được ${money[percentageMoney.current[randomIndexMoney.current]]}`);
       setCloseButton(true);
+      soundRef.current.play();
     },parseInt(timeRotate.current)*1000);
 
   };
