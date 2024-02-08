@@ -34,7 +34,8 @@ function Random() {
   const percentageMoney = useRef([]);
   const randomIndexMoney = useRef(0);
   const timeRotate = useRef("");
-  const soundRef = useRef(new Audio("/assets/mp3/Âm thanh báo.mp3"));
+  const soundResult = useRef(new Audio("/assets/mp3/Âm thanh báo.mp3"));
+  const soundRadom = useRef(new Audio("/assets/mp3/xo-so-mien-bac-cut.mp3"));
   const canvasRef = useRef(null);
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -88,7 +89,8 @@ function Random() {
       ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
       ctx.fillStyle = "white";
       ctx.fill();
-      // Chia hình tròn thành 5 phần bằng nhau
+      
+      // Chia hình tròn thành 7 phần bằng nhau
       const sliceAngle = (2 * Math.PI) / 7;
       for (let i = 0; i < 7; i++) {
         ctx.beginPath();
@@ -127,15 +129,20 @@ function Random() {
       ctx.fillStyle = "black";
       ctx.fill();
     };
+
     // Vẽ lại hình tròn khi kích thước của màn hình thay đổi
     window.addEventListener("resize", drawCircle);
     drawCircle();
+
     // Xóa event listener khi component unmount
     return () => window.removeEventListener("resize", drawCircle);
   }, []);
 
   const showModal = () => {
+    soundRadom.current.play();
+
     setCloseButton(false);
+
     randomIndexMoney.current = Math.floor(Math.random() * 100);
     if (percentageMoney.current.length > 100) {
       percentageMoney.current.splice(-100);
@@ -148,34 +155,35 @@ function Random() {
         ]; // Hoán đổi giá trị tại vị trí i và j
       }
     }
+
     setDeg(
       360 * multiDeg.current +
         moneyDeg[percentageMoney.current[randomIndexMoney.current]]
     );
+
     if (multiDeg.current >= 20) {
       multiDeg.current = 10;
     } else {
       multiDeg.current *= 2;
     }
+
     setTimeout(() => {
+      soundRadom.current.pause();
       setOpen(true);
       setModalText(`Bạn nhận được ${money[percentageMoney.current[randomIndexMoney.current]]}`);
       setCloseButton(true);
-      soundRef.current.play();
+      soundResult.current.play();
     },parseInt(timeRotate.current)*1000);
-
   };
   const handleOk = () => {
     setConfirmLoading(true);
+
     setTimeout(() => {
       setOpen(false);
       setConfirmLoading(false);
     }, 0);
   };
-  const handleCancel = () => {
-    console.log('Clicked cancel button');
-    setOpen(false);
-  };
+
   return (
     <div className="random">
       <Header />
@@ -194,7 +202,7 @@ function Random() {
               open={open}
               onOk={handleOk}
               confirmLoading={confirmLoading}
-              onCancel={handleCancel}
+              onCancel={()=>{setOpen(false);}}
             >
               <p style={{fontSize: '20px'}}>{modalText}</p>
               <img src={moneyUrl[percentageMoney.current[randomIndexMoney.current]]} style={{width: '100%'}}/>

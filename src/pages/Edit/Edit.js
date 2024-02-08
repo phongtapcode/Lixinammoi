@@ -9,7 +9,6 @@ function Edit() {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState("Bạn có muốn về trang chủ?");
-
   if (!localStorage.getItem("percentageMoney")) {
     localStorage.setItem(
       "percentageMoney",
@@ -24,15 +23,14 @@ function Edit() {
       })
     );
   }
-
-  if(!localStorage.getItem("time")){
-    localStorage.setItem("time","5");
+  if (!localStorage.getItem("time")) {
+    localStorage.setItem("time", "5");
   }
   const dataStorage = localStorage.getItem("percentageMoney");
   const timeStorage = localStorage.getItem("time");
   const timeRotate = JSON.parse(timeStorage);
   const datas = JSON.parse(dataStorage);
-  const [time,setTime] = useState(timeRotate);
+  const [time, setTime] = useState(timeRotate);
   const [values, setValues] = useState({
     "5k": datas["5k"],
     "10k": datas["10k"],
@@ -42,12 +40,11 @@ function Edit() {
     "200k": datas["200k"],
     "500k": datas["500k"],
   });
-  
+
   const handleChange = (event) => {
-    const { name, value } = event.target;
     setValues({
       ...values,
-      [name]: value,
+      [event.target.name]: event.target.value,
     });
   };
 
@@ -56,18 +53,18 @@ function Edit() {
     let checkValues = true;
     for (let i in values) {
       sumPercent += parseInt(values[i]);
-      if(parseInt(values[i])<0)checkValues = false;
+      if (parseInt(values[i]) < 0) checkValues = false;
     }
-    if (sumPercent === 100 && checkValues && parseInt(time)>=1) {
+    if (sumPercent === 100 && checkValues && parseInt(time) >= 1) {
       localStorage.setItem("percentageMoney", JSON.stringify(values));
       localStorage.setItem("time", time);
       setOpen(true);
     } else {
-      if(!checkValues){
+      if (!checkValues) {
         alert("Bạn không được để giá trị âm!!!");
-      }else if(parseInt(time)<1){
+      } else if (parseInt(time) < 1) {
         alert("Nhập thời gian lớn hơn 1");
-      }else{
+      } else {
         alert("Vui lòng nhập tổng tỉ lệ bằng 100%");
       }
     }
@@ -83,15 +80,6 @@ function Edit() {
     }, 1000);
   };
 
-  const handleCancel = () => {
-    setOpen(false);
-  };
-
-  const handleChangeTime = (event)=>{
-    const { name, value } = event.target;
-    setTime(value);
-  }
-  
   return (
     <div className="edit">
       <h1>Chỉnh tỉ lệ quay(%)</h1>
@@ -108,9 +96,11 @@ function Edit() {
         })}
         <h1>Chỉnh time quay(giây)</h1>
         <PercentageInput
-              name={"time"}
-              value={time}
-              onChange={handleChangeTime}
+          name={"time"}
+          value={time}
+          onChange={(event) => {
+            setTime(event.target.value);
+          }}
         />
         <Button
           type="primary"
@@ -124,7 +114,9 @@ function Edit() {
           open={open}
           onOk={handleOk}
           confirmLoading={confirmLoading}
-          onCancel={handleCancel}
+          onCancel={() => {
+            setOpen(false);
+          }}
         >
           <p>{modalText}</p>
         </Modal>
