@@ -23,6 +23,7 @@ const moneyUrl = [
 ] 
 const money = ["5k", "10k", "20k", "50k", "100k", "200k", "500k"];
 const moneyDeg = [350, 280, 240, 190, 130, 65, 20];
+
 function Random() {
   const [showAlert, setShowAlert] = useState(false);
   const [closeButton,setCloseButton] = useState(true);
@@ -37,6 +38,7 @@ function Random() {
   const soundResult = useRef(new Audio("/assets/mp3/Âm thanh báo.mp3"));
   const soundRadom = useRef(new Audio("/assets/mp3/xo-so-mien-bac-cut.mp3"));
   const canvasRef = useRef(null);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
@@ -45,11 +47,11 @@ function Random() {
       localStorage.setItem(
         "percentageMoney",
         JSON.stringify({
-          "5k": "30",
-          "10k": "30",
-          "20k": "20",
-          "50k": "10",
-          "100k": "10",
+          "5k": "40",
+          "10k": "40",
+          "20k": "15",
+          "50k": "4",
+          "100k": "1",
           "200k": "0",
           "500k": "0",
         })
@@ -58,6 +60,7 @@ function Random() {
     if(!localStorage.getItem("time")){
       localStorage.setItem("time","5");
     }
+
     const dataStorage = localStorage.getItem("percentageMoney");
     timeRotate.current = localStorage.getItem("time");
     const datas = JSON.parse(dataStorage);
@@ -119,6 +122,7 @@ function Random() {
         ctx.fillText(money[i], 0, 0); // Vẽ chữ tại vị trí (0, 0) sau khi canvas đã được di chuyển và xoay
         ctx.restore(); // Phục hồi trạng thái ban đầu của canvas
       }
+      
       // Vẽ hình tròn mới chồng lên hình tròn cũ
       ctx.beginPath();
       ctx.arc(centerX, centerY, 10, 0, 2 * Math.PI);
@@ -175,6 +179,7 @@ function Random() {
       soundResult.current.play();
     },parseInt(timeRotate.current)*1000);
   };
+
   const handleOk = () => {
     setConfirmLoading(true);
 

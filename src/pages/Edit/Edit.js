@@ -13,11 +13,11 @@ function Edit() {
     localStorage.setItem(
       "percentageMoney",
       JSON.stringify({
-        "5k": "30",
-        "10k": "30",
-        "20k": "20",
-        "50k": "10",
-        "100k": "10",
+        "5k": "40",
+        "10k": "40",
+        "20k": "15",
+        "50k": "4",
+        "100k": "1",
         "200k": "0",
         "500k": "0",
       })
