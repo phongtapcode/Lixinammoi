@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../Random/random.css";
 import { Button,Modal } from "antd";
-import Header from "../../components/Header";;
+import Header from "../../components/Header";
+import axios from "axios";
 const color = [
   "rgb(93, 180, 172)",
   "rgb(143, 210, 164)",
@@ -31,6 +32,7 @@ function Random() {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState('');
+  const [id,setId] = useState(parseInt(localStorage.getItem("id")));
   const multiDeg = useRef(10);
   const percentageMoney = useRef([]);
   const randomIndexMoney = useRef(0);
@@ -59,6 +61,22 @@ function Random() {
     }
     if(!localStorage.getItem("time")){
       localStorage.setItem("time","5");
+    }
+    if (!localStorage.getItem("id")) {
+      axios.get("https://65c886fda4fbc162e111d2e2.mockapi.io/checkrandom/users")
+        .then((response) => {
+          // Lấy số lượng phần tử từ phản hồi
+          const idPost = response.data.length;
+          setId(idPost+1);
+          // Tạo một bản ghi mới với ID tăng dần và click bằng 0
+          const newRecord = { id: idPost + 1, click: 0 };
+          // Thực hiện yêu cầu POST để tạo bản ghi mới
+          return axios.post("https://65c886fda4fbc162e111d2e2.mockapi.io/checkrandom/users", newRecord);
+        })
+        .then((response) => {
+          // Lưu ID vào localStorage
+          localStorage.setItem("id", String(response.data.id));
+        })
     }
 
     const dataStorage = localStorage.getItem("percentageMoney");
@@ -149,7 +167,6 @@ function Random() {
 
     randomIndexMoney.current = Math.floor(Math.random() * 100);
     if (percentageMoney.current.length > 100) {
-      percentageMoney.current.splice(-100);
       // Đảo lại dãy số ngẫu nhiên
       for (let i = percentageMoney.current.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -165,12 +182,22 @@ function Random() {
         moneyDeg[percentageMoney.current[randomIndexMoney.current]]
     );
 
+    // checking người dùng + click
+    axios.get(`https://65c886fda4fbc162e111d2e2.mockapi.io/checkrandom/users/${id}`)
+      .then((respon=>respon.data))
+      .then((data=>{
+        axios.put(`https://65c886fda4fbc162e111d2e2.mockapi.io/checkrandom/users/${id}`,{
+          ...data,
+          "click": data.click+1
+        })
+      }))
+      
     if (multiDeg.current >= 20) {
       multiDeg.current = 10;
     } else {
       multiDeg.current *= 2;
     }
-
+    
     setTimeout(() => {
       soundRadom.current.pause();
       setOpen(true);
