@@ -166,8 +166,8 @@ function Random() {
     setCloseButton(false);
 
     randomIndexMoney.current = Math.floor(Math.random() * 100);
-    percentageMoney.current.splice(-100);
-    if (percentageMoney.current.length <= 100) {
+    if (percentageMoney.current.length > 100) {
+      percentageMoney.current.splice(-100);
       // Đảo lại dãy số ngẫu nhiên
       for (let i = percentageMoney.current.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -177,7 +177,7 @@ function Random() {
         ]; // Hoán đổi giá trị tại vị trí i và j
       }
     }
-
+    console.log(percentageMoney.current)
     setDeg(
       360 * multiDeg.current +
         moneyDeg[percentageMoney.current[randomIndexMoney.current]]
