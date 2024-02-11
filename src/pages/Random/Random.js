@@ -166,7 +166,8 @@ function Random() {
     setCloseButton(false);
 
     randomIndexMoney.current = Math.floor(Math.random() * 100);
-    if (percentageMoney.current.length > 100) {
+    percentageMoney.current.splice(-100);
+    if (percentageMoney.current.length <= 100) {
       // Đảo lại dãy số ngẫu nhiên
       for (let i = percentageMoney.current.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
